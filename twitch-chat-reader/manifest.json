@@ -41,5 +41,8 @@
       "description": "読んでいるコメントと待ちを止める",
       "global": true
     }
-  }
+  },
+  "host_permissions": [
+    "http://localhost/*"
+  ]
 }

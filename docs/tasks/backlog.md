@@ -14,3 +14,5 @@
 - [x] #9 1件の例外で後続が落ちない、拡張の更新後に読み直す、無通信を検知して張り直す、などの堅牢化 → [twitch-chat-reader/content.js](../../twitch-chat-reader/content.js)
 - [ ] #10 OBSで読み上げを配信に乗せる・乗せない設定手順をREADMEに書く（実機での確認が前提） → [twitch-chat-reader/README.md](../../twitch-chat-reader/README.md)
 - [ ] #11 実際のTwitchとPCで確かめる：ゲーム操作中にショートカットが効くか、/meでエモートを含むコメントの消し方、配信者ダッシュボードでの接続（人の確認が前提） → [twitch-chat-reader/README.md](../../twitch-chat-reader/README.md)
+- [x] #12 読み上げ先に棒読みちゃん（HTTP連携）を選べるようにする → [twitch-chat-reader/README.md](../../twitch-chat-reader/README.md)
+- [ ] #13 実際の棒読みちゃんで、ショートカットの停止（/Clear・/Skip）が効くか確かめる（人の確認が前提） → [twitch-chat-reader/background.js](../../twitch-chat-reader/background.js)
