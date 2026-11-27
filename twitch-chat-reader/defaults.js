@@ -1,5 +1,7 @@
 const DEFAULT_SETTINGS = {
   enabled: true,
+  engine: "chrome",
+  bouyomiPort: 50080,
   readName: true,
   rate: 1.2,
   volume: 1.0,

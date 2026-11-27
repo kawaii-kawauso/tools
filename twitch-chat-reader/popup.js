@@ -8,6 +8,12 @@ function showRangeValues() {
   $("volumeValue").textContent = `${Math.round($("volume").value * 100)}%`;
 }
 
+function showEngineFields() {
+  const engine = $("engine").value;
+  for (const el of document.querySelectorAll(".chrome")) el.hidden = engine !== "chrome";
+  for (const el of document.querySelectorAll(".bouyomi")) el.hidden = engine !== "bouyomi";
+}
+
 async function showShortcuts() {
   const commands = await chrome.commands.getAll();
   const label = { "toggle-reading": "ON/OFF", "stop-reading": "止める" };
@@ -36,7 +42,7 @@ async function init() {
       });
       continue;
     }
-    el.addEventListener("input", showRangeValues);
+    el.addEventListener("input", () => { showRangeValues(); showEngineFields(); });
     el.addEventListener("change", () => {
       let value = el.type === "checkbox" ? el.checked : el.value;
       if (el.type === "number" || el.type === "range") {
@@ -48,10 +54,15 @@ async function init() {
     });
   }
   showRangeValues();
+  showEngineFields();
   showShortcuts();
 }
 
-$("test").addEventListener("click", () => chrome.runtime.sendMessage({ type: "speak", text: "テストです。コメントをこの声で読み上げます" }));
+$("test").addEventListener("click", async () => {
+  $("testResult").textContent = "";
+  const result = await chrome.runtime.sendMessage({ type: "test", text: "テストです。コメントをこの声で読み上げます" });
+  if (!result?.ok) $("testResult").textContent = result?.error ?? "読み上げに失敗しました";
+});
 $("stop").addEventListener("click", () => chrome.runtime.sendMessage({ type: "stop" }));
 $("editShortcuts").addEventListener("click", () => chrome.tabs.create({ url: "chrome://extensions/shortcuts" }));
 init();
