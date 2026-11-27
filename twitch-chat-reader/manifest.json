@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Twitch Chat Reader",
+  "version": "0.1.0",
+  "description": "Twitchの配信ページを開いている間、そのチャンネルのコメントを読み上げる",
+  "permissions": [
+    "tts",
+    "storage"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.twitch.tv/*"
+      ],
+      "js": [
+        "defaults.js",
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}

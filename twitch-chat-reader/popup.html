@@ -1,0 +1,21 @@
+<!doctype html>
+<meta charset="utf-8">
+<style>
+  body { width: 260px; font: 13px system-ui, sans-serif; margin: 12px; }
+  label { display: block; margin: 8px 0; }
+  input[type=range], select, textarea { width: 100%; box-sizing: border-box; }
+  textarea { height: 4em; }
+  button { width: 100%; padding: 6px; margin-top: 8px; }
+</style>
+<label><input type="checkbox" id="enabled"> 読み上げる</label>
+<label><input type="checkbox" id="readName"> 名前も読む</label>
+<label><input type="checkbox" id="ignoreCommands"> 「!」で始まるコマンドを読まない</label>
+<label>声 <select id="voiceName"><option value="">既定</option></select></label>
+<label>速さ <span id="rateValue"></span><input type="range" id="rate" min="0.5" max="3" step="0.1"></label>
+<label>音量 <span id="volumeValue"></span><input type="range" id="volume" min="0" max="1" step="0.1"></label>
+<label>最大文字数 <input type="number" id="maxLength" min="5" max="500"></label>
+<label>読まないユーザー（1行に1人）<textarea id="ignoreUsers"></textarea></label>
+<button id="test">試しに読む</button>
+<button id="stop">読み上げを止める</button>
+<script src="defaults.js"></script>
+<script src="popup.js"></script>
