@@ -1,9 +1,20 @@
 const $ = (id) => document.getElementById(id);
 const FIELDS = Object.keys(DEFAULT_SETTINGS);
+// 同期ストレージは書き込みが毎分120回までなので、文字入力は打ち終わりを待ってから保存する
+const TEXT_SAVE_DELAY_MS = 400;
 
 function showRangeValues() {
   $("rateValue").textContent = `${$("rate").value}倍`;
   $("volumeValue").textContent = `${Math.round($("volume").value * 100)}%`;
+}
+
+async function showShortcuts() {
+  const commands = await chrome.commands.getAll();
+  const label = { "toggle-reading": "ON/OFF", "stop-reading": "止める" };
+  $("shortcuts").textContent = commands
+    .filter((c) => label[c.name])
+    .map((c) => `${label[c.name]}: ${c.shortcut || "未設定"}`)
+    .join("　");
 }
 
 async function init() {
@@ -16,15 +27,31 @@ async function init() {
     const el = $(key);
     if (el.type === "checkbox") el.checked = s[key];
     else el.value = s[key];
-    el.addEventListener("input", () => {
-      const value = el.type === "checkbox" ? el.checked : el.type === "range" || el.type === "number" ? Number(el.value) : el.value;
+
+    if (el.tagName === "TEXTAREA") {
+      let pending = null;
+      el.addEventListener("input", () => {
+        clearTimeout(pending);
+        pending = setTimeout(() => chrome.storage.sync.set({ [key]: el.value }), TEXT_SAVE_DELAY_MS);
+      });
+      continue;
+    }
+    el.addEventListener("input", showRangeValues);
+    el.addEventListener("change", () => {
+      let value = el.type === "checkbox" ? el.checked : el.value;
+      if (el.type === "number" || el.type === "range") {
+        value = clampNumber(el.value === "" ? NaN : Number(el.value), Number(el.min), Number(el.max), s[key]);
+        el.value = value;
+      }
+      s[key] = value;
       chrome.storage.sync.set({ [key]: value });
-      showRangeValues();
     });
   }
   showRangeValues();
+  showShortcuts();
 }
 
 $("test").addEventListener("click", () => chrome.runtime.sendMessage({ type: "speak", text: "テストです。コメントをこの声で読み上げます" }));
 $("stop").addEventListener("click", () => chrome.runtime.sendMessage({ type: "stop" }));
+$("editShortcuts").addEventListener("click", () => chrome.tabs.create({ url: "chrome://extensions/shortcuts" }));
 init();

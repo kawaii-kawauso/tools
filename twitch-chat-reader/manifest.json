@@ -13,7 +13,8 @@
   "content_scripts": [
     {
       "matches": [
-        "https://www.twitch.tv/*"
+        "https://www.twitch.tv/*",
+        "https://dashboard.twitch.tv/*"
       ],
       "js": [
         "defaults.js",
@@ -24,5 +25,21 @@
   ],
   "action": {
     "default_popup": "popup.html"
+  },
+  "commands": {
+    "toggle-reading": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+9"
+      },
+      "description": "読み上げのON/OFFを切り替える",
+      "global": true
+    },
+    "stop-reading": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+8"
+      },
+      "description": "読んでいるコメントと待ちを止める",
+      "global": true
+    }
   }
 }
